@@ -2,6 +2,7 @@ import React from 'react'
 import styles from "./HomeCard.module.css"
 import {Link} from "react-router-dom"
 import { CgProductHunt } from 'react-icons/cg'
+import { BASE_URL } from '../../api'
 
 const HomeCard = ({product}) => {
   return (
@@ -10,7 +11,7 @@ const HomeCard = ({product}) => {
     <div className={styles.card}>
         <div className={styles.cardImgWrapper}>
             <img
-                src=""
+                src={`${BASE_URL}${product.image}`}
                 className={styles.cardImgTop}
                 alt="Product Image"
             />
