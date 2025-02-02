@@ -1,7 +1,8 @@
 import React from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { FaShoppingCart } from 'react-icons/fa';
 import styles from './NavBar.module.css';
+import NavBarLink from './NavBarLink';
 
 const NavBar = () => {
   return (
@@ -27,18 +28,8 @@ const NavBar = () => {
 
         {/* Navbar Links & Cart Button */}
         <div className="collapse navbar-collapse" id="navbarContent">
-          <ul className="navbar-nav ms-auto">
-            <li className="nav-item">
-              <NavLink className="nav-link" to="/">Home</NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink className="nav-link" to="/shop">Shop</NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink className="nav-link" to="/contact">Contact</NavLink>
-            </li>
-          </ul>
-
+          <NavBarLink />  {/* Rendered once here, removing duplicate nav items */}
+          
           {/* Shopping Cart Button */}
           <Link to="/cart" className={`btn btn-dark ms-3 rounded-pill position-relative ${styles.responsiveCart}`}>
             <FaShoppingCart size={18} />
