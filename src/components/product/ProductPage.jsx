@@ -1,8 +1,33 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import ProductPagePlaceHolder from './ProductPagePlaceHolder'
 import RelatedProducts from './RelatedProducts'
-
+import { useParams } from 'react-router-dom'
+import api from "../../api"
 const ProductPage = () => {
+    const {slug} = useParams()
+    const [product, setProduct] = useState({})
+    const [similarProducts, setSimilarProducts] = useState([])
+    const [loading, setLoading] = useState(false)
+
+    useEffect(function(){
+        setLoading(true)
+        api.get(`product_detail/${slug}`)
+        .then(res=>{
+            console.log(res.data)
+            setProduct(res.data)
+            setSimilarProducts(res.data.similar_products)
+            setLoading(false)
+        })
+        .catch(err=>{
+            console.log(err.message)
+            setLoading(false)
+        })
+    },[])
+
+    if(loading){
+        return <ProductPagePlaceHolder />
+    }
+
   return (
     <div>
             <ProductPagePlaceHolder />
@@ -18,9 +43,9 @@ const ProductPage = () => {
                     </div>
                     <div className="col-md-6">
                         <div className="small mb-1"> SKU: BST-498</div>
-                        <h1 className="display-5 fw-bolder"> Shop item template</h1>
+                        <h1 className="display-5 fw-bolder">{product.name}</h1>
                         <div className="fs-5 mb-5">
-                            <span>$40.00</span>
+                            <span>{`$${product.price}`}</span>
                         </div>
                         <p className="lead">
                             Lorem isum dolor sit amet consectetur adipisicing elit.
@@ -48,7 +73,7 @@ const ProductPage = () => {
                 </div>
             </div>
         </section>
-        <RelatedProducts />
+        <RelatedProducts products={similarProducts}/>
     </div>
   )
 }
