@@ -4,15 +4,21 @@ import Header from "./Header";
 import CardContainer from "./CardContainer";
 import Error from "../ui/Error";
 import PlaceHolderContainer from '../ui/PlaceHolderContainer';
+import { randomValue } from '../../GenerateCartCode';
 
 const HomePage = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  useEffect(function(){
+    if (localStorage.getItem("cart_code") === null)
+      localStorage.setItem("cart_code", randomValue)
+  },[])
+
   useEffect(() => {
     setLoading(true);
-    setError(""); // Clear previous errors before a new request
+    setError(""); 
 
     axios.get("http://127.0.0.1:8001/products")
       .then(res => {
@@ -21,10 +27,10 @@ const HomePage = () => {
       })
       .catch(err => {
         console.error(err.message);
-        setError(err.message); // Set the error message
+        setError(err.message);
       })
       .finally(() => {
-        setLoading(false); // Ensure loading state is updated
+        setLoading(false);
       });
   }, []);
 

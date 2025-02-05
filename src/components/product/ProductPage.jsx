@@ -3,11 +3,26 @@ import ProductPagePlaceHolder from './ProductPagePlaceHolder'
 import RelatedProducts from './RelatedProducts'
 import { useParams } from 'react-router-dom'
 import api from "../../api"
+import { BASE_URL } from '../../api'
 const ProductPage = () => {
     const {slug} = useParams()
     const [product, setProduct] = useState({})
     const [similarProducts, setSimilarProducts] = useState([])
     const [loading, setLoading] = useState(false)
+    const cart_code = localStorage.getItem("cart_code")    
+
+    const newItem = {cart_code: cart_code, product_id:product.id}
+    
+    function add_item(){
+        api.post("add_item/", newItem)
+        .then (res => {
+            console.log(res.data)
+        })
+
+        .catch(err =>{
+            console.log(err.message)
+        })
+    }
 
     useEffect(function(){
         setLoading(true)
@@ -22,7 +37,7 @@ const ProductPage = () => {
             console.log(err.message)
             setLoading(false)
         })
-    },[])
+    },[slug])
 
     if(loading){
         return <ProductPagePlaceHolder />
@@ -30,14 +45,13 @@ const ProductPage = () => {
 
   return (
     <div>
-            <ProductPagePlaceHolder />
         <section className="py-3">
             <div className="container px-4 px-lg-5 my-5">
                 <div className="row gx-4 gx-lg-5 align-items-center">
                     <div className="col-md-6">
                         <img
                             className="card-img-top mb-5 mb-md-0"
-                            src="https:dummyimage.com/600x700/dee2e6/6c757d.jpg"
+                            src={`${BASE_URL}${product.image}`}
                             alt="..."
                         />
                     </div>
@@ -54,16 +68,11 @@ const ProductPage = () => {
                             delectus ipsam minima ea iste laborum vero?
                         </p>
                         <div className="d-flex">
-                            <input 
-                                className="form-control text-center me-3"
-                                id="inputQuantity"
-                                type="num"
-                                value="1"
-                                style={{maxWidth: "3rem"}}
-                            />
+                            
                             <button
                                 className="btn btn-outline-dark flex-shrink-0"
                                 type="button"
+                                onClick={add_item}
                             >
                                 <i className="bi-cart-fill me-1"></i>
                                 Add to cart
