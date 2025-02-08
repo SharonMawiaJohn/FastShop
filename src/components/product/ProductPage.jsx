@@ -15,7 +15,8 @@ const ProductPage = () => {
     const cart_code = localStorage.getItem("cart_code")
 
     useEffect(function(){
-        api.get(`product_in_cart?tcart_code=${cart_code}&product_id=${product.id}`)
+        if product.id {
+        api.get(`product_in_cart?cart_code=${cart_code}&product_id=${product.id}`)
         .then(res => {
             console.log(res.data)
             setInCart(res.data.product_in_cart)
@@ -23,6 +24,9 @@ const ProductPage = () => {
         .catch(err=>{
             console.log(err.message)
         })
+        
+    
+        }
     },[cart_code, product.id])
 
 
