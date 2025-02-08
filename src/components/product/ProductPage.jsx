@@ -13,6 +13,12 @@ const ProductPage = () => {
     const [loading, setLoading] = useState(false)
     const [inCart,setInCart] = useState(false)
     const cart_code = localStorage.getItem("cart_code")
+
+    useEffect(function(){
+        api.get('product_in_cart?')
+    },[])
+
+
     const newItem = {cart_code: cart_code, product_id:product.id}
     
     function add_item(){
