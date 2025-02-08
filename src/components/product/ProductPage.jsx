@@ -2,21 +2,24 @@ import React, { useEffect, useState } from 'react'
 import ProductPagePlaceHolder from './ProductPagePlaceHolder'
 import RelatedProducts from './RelatedProducts'
 import { useParams } from 'react-router-dom'
-import api from "../../api"
 import { BASE_URL } from '../../api'
+import api from "../../api"
+
+
 const ProductPage = () => {
     const {slug} = useParams()
     const [product, setProduct] = useState({})
     const [similarProducts, setSimilarProducts] = useState([])
     const [loading, setLoading] = useState(false)
-    const cart_code = localStorage.getItem("cart_code")    
-
+    const [inCart,setInCart] = useState(false)
+    const cart_code = localStorage.getItem("cart_code")
     const newItem = {cart_code: cart_code, product_id:product.id}
     
     function add_item(){
         api.post("add_item/", newItem)
         .then (res => {
             console.log(res.data)
+            setInCart(true)
         })
 
         .catch(err =>{
@@ -73,9 +76,10 @@ const ProductPage = () => {
                                 className="btn btn-outline-dark flex-shrink-0"
                                 type="button"
                                 onClick={add_item}
+                                disabled={inCart}
                             >
                                 <i className="bi-cart-fill me-1"></i>
-                                Add to cart
+                                {inCart? "Product added to cart":"Add to cart"}
                             </button>
                         </div>
                     </div>
