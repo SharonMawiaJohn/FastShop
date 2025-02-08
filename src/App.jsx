@@ -4,11 +4,27 @@ import HomePage from "./components/home/HomePage";
 import MainLayout from "./components/layout/MainLayout";
 import NotFoundPage from './components/ui/NotFoundPage';
 import ProductPage from './components/product/ProductPage';
-import {useState} from 'react'
+import {useState, useEffect} from 'react';
+import api from "./api";
 
 const App = () => {
 
   const [numCartItems, setNumberCartItems] = useState(0);
+  const cart_code = localStorage.getItem("cart_code")
+
+  useEffect(function(){
+    if(cart_code){
+      api.get(`get_cart_stat?cart_code=${cart_code}`)
+      .then(res=>{
+        console.log(res.data)
+      })
+
+      .catch(err => {
+        console.log(err.message)
+      })
+    }
+    
+  })
 
   return (
     <BrowserRouter>
